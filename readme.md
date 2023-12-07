@@ -10,3 +10,6 @@ Minimal patches used, check the "patches" folder of each program.
 ---
 
 Used daily on Arch Linux
+
+## Install all required packages to start
+xorg-server xorg-xinit libx11 libxinerama libxft webkit2gtk
