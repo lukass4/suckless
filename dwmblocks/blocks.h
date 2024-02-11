@@ -3,7 +3,7 @@ static const Block blocks[] = {
 	/*Icon*/	/*Command*/		/*Update Interval*/	/*Update Signal*/
   {"", "countdown get", 1, 4},
   {"", "mutemic status", 0, 2},
-  {"", "volume status", 0, 3},
+  {"", "volume status", 5, 3},
   {"", "date '+%a %d %I:%M%p'", 5, 1},
 };
 
