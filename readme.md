@@ -6,6 +6,7 @@ Minimal patches used, check the "patches" folder of each program.
 ## Things to note
 - Also modified dwm to allow emojis
 - ST transparent bg requires [picom](https://github.com/yshui/picom)
+- You need to add pacman -Sy as a cronjob for the package update counter to work
 
 ---
 
