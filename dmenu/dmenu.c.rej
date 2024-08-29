@@ -1,19 +1,43 @@
---- dmenu.c
-+++ dmenu.c
-@@ -692,11 +702,13 @@ setup(void)
+--- dmenu.c	2019-02-02 13:55:02.000000000 +0100
++++ dmenu.c	2020-05-24 00:27:58.038586112 +0200
+@@ -601,8 +606,13 @@ setup(void)
+ 	int a, di, n, area = 0;
+ #endif
+ 	/* init appearance */
+-	for (j = 0; j < SchemeLast; j++)
+-		scheme[j] = drw_scm_create(drw, colors[j], 2);
++	for (j = 0; j < SchemeLast; j++) {
++		scheme[j] = drw_scm_create(drw, (const char**)colors[j], 2);
++	}
++	for (j = 0; j < SchemeOut; ++j) {
++		for (i = 0; i < 2; ++i)
++			free(colors[j][i]);
++	}
  
- 	/* create menu window */
- 	swa.override_redirect = True;
--	swa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
-+	swa.background_pixel = 0;
-+	swa.border_pixel = 0;
-+	swa.colormap = cmap;
- 	swa.event_mask = ExposureMask | KeyPressMask | VisibilityChangeMask;
- 	win = XCreateWindow(dpy, parentwin, x, y, mw, mh, 0,
--	                    CopyFromParent, CopyFromParent, CopyFromParent,
--	                    CWOverrideRedirect | CWBackPixel | CWEventMask, &swa);
-+	                    depth, CopyFromParent, visual,
-+	                    CWOverrideRedirect | CWBackPixel | CWBorderPixel | CWColormap | CWEventMask, &swa);
- 	XSetClassHint(dpy, win, &ch);
+ 	clip = XInternAtom(dpy, "CLIPBOARD",   False);
+ 	utf8 = XInternAtom(dpy, "UTF8_STRING", False);
+@@ -783,8 +828,23 @@ main(int argc, char *argv[])
+ 		die("could not get embedding window attributes: 0x%lx",
+ 		    parentwin);
+ 	drw = drw_create(dpy, screen, root, wa.width, wa.height);
+-	if (!drw_fontset_create(drw, fonts, LENGTH(fonts)))
++	readxresources();
++	/* Now we check whether to override xresources with commandline parameters */
++	if ( tempfonts )
++	   fonts[0] = strdup(tempfonts);
++	if ( colortemp[0])
++	   colors[SchemeNorm][ColBg] = strdup(colortemp[0]);
++	if ( colortemp[1])
++	   colors[SchemeNorm][ColFg] = strdup(colortemp[1]);
++	if ( colortemp[2])
++	   colors[SchemeSel][ColBg]  = strdup(colortemp[2]);
++	if ( colortemp[3])
++	   colors[SchemeSel][ColFg]  = strdup(colortemp[3]);
++
++	if (!drw_fontset_create(drw, (const char**)fonts, LENGTH(fonts)))
+ 		die("no fonts could be loaded.");
++
++	free(fonts[0]);
+ 	lrpad = drw->fonts->h;
  
- 
+ #ifdef __OpenBSD__
