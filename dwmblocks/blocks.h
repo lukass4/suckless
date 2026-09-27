@@ -6,6 +6,7 @@ static const Block blocks[] = {
   {"", "getevent", 60, 6},
   {"", "packageupdates", 300, 5},
   {"", "volume status", 5, 3},
+  {"", "battery", 30, 7},
   {"", "date '+%a %d %I:%M%p'", 5, 1},
 };
 
